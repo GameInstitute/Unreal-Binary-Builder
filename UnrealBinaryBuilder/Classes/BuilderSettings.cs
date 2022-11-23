@@ -304,7 +304,7 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.bWithServer = (bool)mainWindow.bWithServer.IsChecked;
 			BSJ.bWithClient = (bool)mainWindow.bWithClient.IsChecked;
 			BSJ.bCompileDatasmithPlugins = (bool)mainWindow.bCompileDatasmithPlugins.IsChecked;
-			BSJ.bVS2019 = (bool)mainWindow.bVS2019.IsChecked;
+			//BSJ.bVS2019 = (bool)mainWindow.bVS2019.IsChecked;
 			BSJ.bShutdownPC = (bool)mainWindow.bShutdownWindows.IsChecked;
 			BSJ.bShutdownIfBuildSuccess = (bool)mainWindow.bShutdownIfSuccess.IsChecked;
 			BSJ.bContinueToEngineBuild = (bool)mainWindow.bContinueToEngineBuild.IsChecked;

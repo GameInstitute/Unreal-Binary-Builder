@@ -49,10 +49,39 @@ namespace UnrealBinaryBuilder
 			return ReturnValue;
 		}
 
-		public static string GetMsBuildPath()
+		
+		public static string GetMsBuildPath(int vsType,int vsVersion)
 		{
-			string ProgramFilesx86Path = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-			return Path.Combine(ProgramFilesx86Path, "Microsoft Visual Studio", "2019", "Community", "MSBuild", "Current", "Bin", "MSBuild.exe");
+			// vsType 0 = Community; 1 = Professional; 2 = Enterprise
+			// vsVersion 0 =  2019; 1 = 2022
+
+			string ProgramFilesPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+			string vsTypeStr = "Community";
+            string vsVersionStr = "2019";
+
+            if (vsVersion>=1)
+			{
+                ProgramFilesPath = Environment.GetEnvironmentVariable("ProgramFiles");
+            }
+			else
+			{
+                ProgramFilesPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+            }
+
+			if (vsType == 0)
+				vsTypeStr = "Community";
+			else if (vsType == 1)
+				vsTypeStr = "Professional";
+			else if (vsType == 2)
+				vsTypeStr = "Enterprise";
+
+			if (vsVersion == 0)
+				vsVersionStr = "2019";
+			else if (vsVersion == 1)
+				vsVersionStr = "2022";
+
+
+			return Path.Combine(ProgramFilesPath, "Microsoft Visual Studio", vsVersionStr, vsTypeStr, "MSBuild", "Current", "Bin", "MSBuild.exe");
 		}
 
 		public static string GetEngineVersion(string BaseEnginePath)
@@ -1027,10 +1056,10 @@ namespace UnrealBinaryBuilder
 				CommandLineArgs += string.Format(" -set:CompileDatasmithPlugins={0}", GetConditionalString(bCompileDatasmithPlugins.IsChecked));
 			}
 
-			if (SupportVisualStudio2019)
-			{
-				CommandLineArgs += string.Format(" -set:VS2019={0}", GetConditionalString(bVS2019.IsChecked));
-			}
+			//if (SupportVisualStudio2019)
+			//{
+			//	CommandLineArgs += string.Format(" -set:VS2019={0}", GetConditionalString(bVS2019.IsChecked));
+			//}
 
 			if (SupportServerClientTargets)
 			{
@@ -1344,8 +1373,9 @@ namespace UnrealBinaryBuilder
 						OnBuildFinished(true);
 						return false;
 					}
+					 // VSVersion.SelectedIndex =;
 
-					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath();
+					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath(VSType.SelectedIndex,VSType.SelectedIndex);
 					if (File.Exists(MsBuildFile))
 					{
 						ProcessStartInfo processStartInfo = new ProcessStartInfo
@@ -1399,7 +1429,7 @@ namespace UnrealBinaryBuilder
 
 				if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
 				{
-					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath();
+					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath(VSType.SelectedIndex,VSType.SelectedIndex);
 					if (File.Exists(MsBuildFile))
 					{
 						ProcessStartInfo processStartInfo = new ProcessStartInfo
